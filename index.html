@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>30 Days From Today - Subscription End Date Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📅 30 Days From Today</h1>
+            <p class="tagline">Calculate when your 30-day subscription ends</p>
+        </header>
+
+        <main>
+            <div class="card">
+                <h2>When will your 30-day subscription end?</h2>
+                
+                <div class="date-selector">
+                    <label for="startDate">Start Date:</label>
+                    <input type="date" id="startDate" />
+                    <button class="btn-secondary" id="todayBtn">Use Today</button>
+                </div>
+
+                <div class="subscription-buttons">
+                    <button class="btn-primary" id="monthBtn">
+                        <span class="btn-icon">📆</span>
+                        <span class="btn-text">1 Month</span>
+                        <span class="btn-subtext">30 days</span>
+                    </button>
+                    <button class="btn-primary" id="yearBtn">
+                        <span class="btn-icon">🗓️</span>
+                        <span class="btn-text">1 Year</span>
+                        <span class="btn-subtext">365 days</span>
+                    </button>
+                </div>
+
+                <div class="custom-duration">
+                    <label for="customDays">Custom Duration (days):</label>
+                    <div class="custom-input-group">
+                        <input type="number" id="customDays" min="1" placeholder="e.g., 7, 90, 180" />
+                        <button class="btn-secondary" id="customBtn">Calculate</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-card" id="resultCard" style="display: none;">
+                <div class="result-header">
+                    <h3>Your Subscription Ends:</h3>
+                </div>
+                <div class="result-content">
+                    <div class="end-date" id="endDate"></div>
+                    <div class="duration-info" id="durationInfo"></div>
+                    <div class="days-count" id="daysCount"></div>
+                </div>
+                <div class="timeline" id="timeline">
+                    <div class="timeline-bar">
+                        <div class="timeline-progress"></div>
+                    </div>
+                    <div class="timeline-labels">
+                        <span id="startLabel">Start</span>
+                        <span id="endLabel">End</span>
+                    </div>
+                </div>
+                <div class="result-actions">
+                    <button class="btn-secondary" id="copyBtn">📋 Copy Date</button>
+                    <button class="btn-secondary" id="shareBtn">🔗 Share</button>
+                    <button class="btn-secondary" id="addCalendarBtn">➕ Add to Calendar</button>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <h3>Quick Info</h3>
+                <div class="info-cards">
+                    <div class="info-card">
+                        <div class="info-icon">📱</div>
+                        <h4>Monthly Plans</h4>
+                        <p>Typically billed every 30 days from your start date</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">💳</div>
+                        <h4>Annual Plans</h4>
+                        <p>Usually billed every 365 days with better savings</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">⏰</div>
+                        <h4>Set Reminders</h4>
+                        <p>Add the end date to your calendar to cancel in time</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Made with ❤️ for subscription-savvy people</p>
+        </footer>
+    </div>
+
+    <div class="notification" id="notification"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
