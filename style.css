@@ -424,6 +424,16 @@ footer {
     }
 }
 
+@media (prefers-reduced-motion: reduce) {
+    .result-card, .timeline-progress {
+        animation: none;
+    }
+
+    .btn-primary, .btn-secondary, #startDate, #customDays, .notification, .info-card {
+        transition: none;
+    }
+}
+
 /* Dark mode input color fix for some browsers */
 input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(1);

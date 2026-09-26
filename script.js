@@ -122,7 +122,10 @@ function displayResult(startDate, endDate, days) {
     
     // Scroll to result
     setTimeout(() => {
-        resultCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        resultCard.scrollIntoView({
+            behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+            block: 'nearest'
+        });
     }, 100);
 
     // Store the result for copy/share functions

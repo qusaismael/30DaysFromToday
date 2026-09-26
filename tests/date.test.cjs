@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
 
-function loadCalculator({ now, zone, start, custom = '' }) {
+function loadCalculator({ now, zone, start, custom = '', reducedMotion = false }) {
   process.env.TZ = zone;
   const elements = Object.fromEntries([
     'startDate', 'customDays', 'resultCard', 'endDate', 'durationInfo',
@@ -12,6 +12,7 @@ function loadCalculator({ now, zone, start, custom = '' }) {
   elements.startDate.value = start;
   elements.customDays.value = custom;
   elements.resultCard.style.display = 'none';
+  elements.resultCard.scrollIntoView = options => { elements.resultCard.scrollOptions = options; };
   class FixedDate extends Date {
     constructor(...args) { super(...(args.length ? args : [now])); }
     static now() { return new Date(now).getTime(); }
@@ -19,8 +20,8 @@ function loadCalculator({ now, zone, start, custom = '' }) {
   const context = vm.createContext({
     Date: FixedDate,
     document: { getElementById: id => elements[id], addEventListener() {} },
-    window: {},
-    setTimeout() {}
+    window: { matchMedia: () => ({ matches: reducedMotion }) },
+    setTimeout(fn) { fn(); }
   });
   vm.runInContext(fs.readFileSync(require.resolve('../script.js'), 'utf8'), context);
   return { context, elements };
@@ -52,4 +53,14 @@ test('completed result has a persistent screen-reader announcement', () => {
   assert.match(elements.resultAnnouncement.textContent, /January 31, 2026.*30 days from now/);
   const html = fs.readFileSync(require.resolve('../index.html'), 'utf8');
   assert.match(html, /id="resultAnnouncement"[^>]*role="status"[^>]*aria-live="polite"/);
+});
+
+test('reduced motion avoids smooth result scrolling and entrance animation', () => {
+  const { context, elements } = loadCalculator({
+    zone: 'UTC', now: '2026-01-01T12:00:00Z', start: '2026-01-01', reducedMotion: true
+  });
+  context.calculateEndDate(30);
+  assert.equal(elements.resultCard.scrollOptions.behavior, 'auto');
+  const css = fs.readFileSync(require.resolve('../style.css'), 'utf8');
+  assert.match(css, /@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{[\s\S]*?\.result-card[^}]*animation:\s*none/);
 });
