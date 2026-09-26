@@ -50,9 +50,9 @@ function calculateEndDate(days) {
 
 function calculateCustom() {
     const customDaysInput = document.getElementById('customDays');
-    const days = parseInt(customDaysInput.value);
+    const days = Number(customDaysInput.value);
 
-    if (!days || days < 1) {
+    if (!Number.isSafeInteger(days) || days < 1) {
         showNotification('Please enter a valid number of days', 'error');
         return;
     }

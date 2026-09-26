@@ -11,6 +11,7 @@ function loadCalculator({ now, zone, start, custom = '' }) {
   ].map(id => [id, { value: '', textContent: '', style: {}, classList: { add() {}, remove() {} }, scrollIntoView() {} }]));
   elements.startDate.value = start;
   elements.customDays.value = custom;
+  elements.resultCard.style.display = 'none';
   class FixedDate extends Date {
     constructor(...args) { super(...(args.length ? args : [now])); }
     static now() { return new Date(now).getTime(); }
@@ -32,4 +33,13 @@ test('a fall DST transition counts one calendar day, not two elapsed-day units',
   context.calculateEndDate(1);
   assert.match(elements.endDate.textContent, /November 2, 2026/);
   assert.equal(elements.daysCount.textContent, '1 days from now');
+});
+
+test('fractional custom days are rejected without showing a result', () => {
+  const { context, elements } = loadCalculator({
+    zone: 'UTC', now: '2026-01-01T12:00:00Z', start: '2026-01-01', custom: '2.5'
+  });
+  context.calculateCustom();
+  assert.equal(elements.resultCard.style.display, 'none');
+  assert.match(elements.notification.textContent, /valid number of days/);
 });

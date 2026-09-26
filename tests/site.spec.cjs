@@ -21,3 +21,11 @@ test.describe('New York DST', () => {
     await expect(page.locator('#daysCount')).toHaveText('1 days from now');
   });
 });
+
+test('fractional days are rejected instead of rounded', async ({ page }) => {
+  await page.goto('/');
+  await page.locator('#customDays').fill('2.5');
+  await page.locator('#customBtn').click();
+  await expect(page.locator('#resultCard')).toBeHidden();
+  await expect(page.locator('#notification')).toContainText('valid number of days');
+});
