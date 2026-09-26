@@ -7,7 +7,7 @@ function loadCalculator({ now, zone, start, custom = '' }) {
   process.env.TZ = zone;
   const elements = Object.fromEntries([
     'startDate', 'customDays', 'resultCard', 'endDate', 'durationInfo',
-    'daysCount', 'startLabel', 'endLabel', 'notification'
+    'daysCount', 'startLabel', 'endLabel', 'notification', 'resultAnnouncement'
   ].map(id => [id, { value: '', textContent: '', style: {}, classList: { add() {}, remove() {} }, scrollIntoView() {} }]));
   elements.startDate.value = start;
   elements.customDays.value = custom;
@@ -42,4 +42,14 @@ test('fractional custom days are rejected without showing a result', () => {
   context.calculateCustom();
   assert.equal(elements.resultCard.style.display, 'none');
   assert.match(elements.notification.textContent, /valid number of days/);
+});
+
+test('completed result has a persistent screen-reader announcement', () => {
+  const { context, elements } = loadCalculator({
+    zone: 'UTC', now: '2026-01-01T12:00:00Z', start: '2026-01-01'
+  });
+  context.calculateEndDate(30);
+  assert.match(elements.resultAnnouncement.textContent, /January 31, 2026.*30 days from now/);
+  const html = fs.readFileSync(require.resolve('../index.html'), 'utf8');
+  assert.match(html, /id="resultAnnouncement"[^>]*role="status"[^>]*aria-live="polite"/);
 });

@@ -114,6 +114,8 @@ function displayResult(startDate, endDate, days) {
     daysCountEl.textContent = daysFromNowText;
     startLabelEl.textContent = startDateFormatted;
     endLabelEl.textContent = endDateShort;
+    document.getElementById('resultAnnouncement').textContent =
+        `${endDateFormatted}. ${durationText}. ${daysFromNowText}`;
 
     // Show result card with animation
     resultCard.style.display = 'block';
