@@ -1,0 +1,10 @@
+{
+  "name": "30-days-from-today-quality-checks",
+  "private": true,
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0"
+  }
+}
