@@ -35,13 +35,13 @@ function setToday() {
 
 function calculateEndDate(days) {
     const startDateInput = document.getElementById('startDate');
-    const startDate = new Date(startDateInput.value);
-    
     if (!startDateInput.value) {
         showNotification('Please select a start date', 'error');
         return;
     }
 
+    const [year, month, day] = startDateInput.value.split('-').map(Number);
+    const startDate = new Date(year, month - 1, day);
     const endDate = new Date(startDate);
     endDate.setDate(endDate.getDate() + days);
 
