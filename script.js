@@ -35,13 +35,13 @@ function setToday() {
 
 function calculateEndDate(days) {
     const startDateInput = document.getElementById('startDate');
-    const startDate = new Date(startDateInput.value);
-    
     if (!startDateInput.value) {
         showNotification('Please select a start date', 'error');
         return;
     }
 
+    const [year, month, day] = startDateInput.value.split('-').map(Number);
+    const startDate = new Date(year, month - 1, day);
     const endDate = new Date(startDate);
     endDate.setDate(endDate.getDate() + days);
 
@@ -50,14 +50,18 @@ function calculateEndDate(days) {
 
 function calculateCustom() {
     const customDaysInput = document.getElementById('customDays');
-    const days = parseInt(customDaysInput.value);
+    const days = Number(customDaysInput.value);
 
-    if (!days || days < 1) {
+    if (!Number.isSafeInteger(days) || days < 1) {
         showNotification('Please enter a valid number of days', 'error');
         return;
     }
 
     calculateEndDate(days);
+}
+
+function civilDay(date) {
+    return Math.floor(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / 86400000);
 }
 
 function displayResult(startDate, endDate, days) {
@@ -92,12 +96,8 @@ function displayResult(startDate, endDate, days) {
         }
     }
 
-    // Calculate days from now
-    const now = new Date();
-    now.setHours(0, 0, 0, 0);
-    const endDateCopy = new Date(endDate);
-    endDateCopy.setHours(0, 0, 0, 0);
-    const daysFromNow = Math.ceil((endDateCopy - now) / (1000 * 60 * 60 * 24));
+    // Count civil dates, not elapsed 24-hour periods (which vary across DST).
+    const daysFromNow = civilDay(endDate) - civilDay(new Date());
 
     let daysFromNowText = '';
     if (daysFromNow > 0) {
@@ -114,13 +114,18 @@ function displayResult(startDate, endDate, days) {
     daysCountEl.textContent = daysFromNowText;
     startLabelEl.textContent = startDateFormatted;
     endLabelEl.textContent = endDateShort;
+    document.getElementById('resultAnnouncement').textContent =
+        `${endDateFormatted}. ${durationText}. ${daysFromNowText}`;
 
     // Show result card with animation
     resultCard.style.display = 'block';
     
     // Scroll to result
     setTimeout(() => {
-        resultCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        resultCard.scrollIntoView({
+            behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+            block: 'nearest'
+        });
     }, 100);
 
     // Store the result for copy/share functions
