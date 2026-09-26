@@ -1,6 +1,6 @@
 # Local baseline, before code changes
 
-Captured from the original static page using `SITE_CAPTURE_TAG=before npm test -- tests/audit.spec.cjs` at 1440×900, 390×844, and 320×568, with one result state for each. All six JPEGs are full-page captures.
+Captured from the original static page using `SITE_CAPTURE_TAG=before flock -w 1200 /opt/data/repos/.site-browser.lock npm test -- tests/audit.spec.cjs --workers=1` at 1440×900, 390×844, and 320×568, with one result state for each. All six JPEGs are full-page captures.
 
 | Viewport | Initial page height | Result page height | Horizontal overflow | Small visible targets | Page errors | Reduced-motion result animation |
 |---|---:|---:|---:|---:|---|---|
