@@ -64,3 +64,13 @@ test('reduced motion avoids smooth result scrolling and entrance animation', () 
   const css = fs.readFileSync(require.resolve('../style.css'), 'utf8');
   assert.match(css, /@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{[\s\S]*?\.result-card[^}]*animation:\s*none/);
 });
+
+test('one-year preset remains exactly 365 days in a leap year', () => {
+  const { context, elements } = loadCalculator({
+    zone: 'UTC', now: '2024-01-01T12:00:00Z', start: '2024-01-01'
+  });
+  context.calculateEndDate(365);
+  assert.match(elements.endDate.textContent, /December 31, 2024/);
+  assert.equal(elements.durationInfo.textContent, '1 Year Subscription');
+  assert.equal(context.window.currentResult.days, 365);
+});
