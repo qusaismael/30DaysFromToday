@@ -60,6 +60,10 @@ function calculateCustom() {
     calculateEndDate(days);
 }
 
+function civilDay(date) {
+    return Math.floor(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / 86400000);
+}
+
 function displayResult(startDate, endDate, days) {
     const resultCard = document.getElementById('resultCard');
     const endDateEl = document.getElementById('endDate');
@@ -92,12 +96,8 @@ function displayResult(startDate, endDate, days) {
         }
     }
 
-    // Calculate days from now
-    const now = new Date();
-    now.setHours(0, 0, 0, 0);
-    const endDateCopy = new Date(endDate);
-    endDateCopy.setHours(0, 0, 0, 0);
-    const daysFromNow = Math.ceil((endDateCopy - now) / (1000 * 60 * 60 * 24));
+    // Count civil dates, not elapsed 24-hour periods (which vary across DST).
+    const daysFromNow = civilDay(endDate) - civilDay(new Date());
 
     let daysFromNowText = '';
     if (daysFromNow > 0) {
