@@ -102,6 +102,10 @@ h1 {
     max-width: 34rem;
 }
 
+.nowrap {
+    white-space: nowrap;
+}
+
 .card {
     background: var(--surface);
     border: 1px solid var(--line-soft);
@@ -151,7 +155,7 @@ input {
 }
 
 input::placeholder {
-    color: var(--text-muted);
+    color: var(--text-secondary);
     opacity: 1;
 }
 
@@ -166,9 +170,16 @@ input[type="number"] {
     color-scheme: dark;
 }
 
+input[type="number"] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
-    opacity: 0.5;
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
 }
 
 #startDate {
@@ -347,7 +358,7 @@ button:focus-visible {
 
 /* the day ruler — the one memorable element */
 .timeline {
-    margin: var(--sp-6) 0;
+    margin: var(--sp-8) 0;
 }
 
 .timeline-bar {
@@ -378,7 +389,7 @@ button:focus-visible {
     }
 }
 
-/* measuring ticks across the fill */
+/* measuring ticks across the fill — minor every 14px, major every 70px */
 .timeline-bar::after {
     content: '';
     position: absolute;
@@ -386,10 +397,10 @@ button:focus-visible {
     background:
         repeating-linear-gradient(90deg,
             rgba(234, 238, 248, 0.35) 0 1px,
-            transparent 1px 12.5%),
+            transparent 1px 70px),
         repeating-linear-gradient(90deg,
             rgba(234, 238, 248, 0.14) 0 1px,
-            transparent 1px 2.5%);
+            transparent 1px 14px);
     pointer-events: none;
 }
 
@@ -441,7 +452,7 @@ button:focus-visible {
 }
 
 .info-icon {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     margin-bottom: var(--sp-2);
 }
 
